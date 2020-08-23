@@ -9,11 +9,11 @@ import tqdm
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import os
 from torch.utils.data import DataLoader
 
 from src.model import SODModel
 from src.dataloader import InfDataloader, SODLoader
-
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Parameters to train your model.')
@@ -59,9 +59,15 @@ def run_inference(args):
             pred_masks_round = np.squeeze(pred_masks.round().cpu().numpy(), axis=(0, 1))
 
             print('Image :', batch_idx)
-            cv2.imshow('Input Image', img_np)
-            cv2.imshow('Generated Saliency Mask', pred_masks_raw)
-            cv2.imshow('Rounded-off Saliency Mask', pred_masks_round)
+            pred_masks_raw = (pred_masks_raw * 255).astype("uint8")
+            root_dir = 'data/maps_test/'
+            directory = args.imgs_folder.split('/')[-1] + "/"
+            if not os.path.exists(root_dir + directory):
+                os.makedirs(root_dir + directory)
+            cv2.imwrite(root_dir + directory + str(batch_idx) + '.png',pred_masks_raw)
+            # cv2.imshow('Input Image', img_np)
+            # cv2.imshow('Generated Saliency Mask', pred_masks_raw)
+            # cv2.imshow('Rounded-off Saliency Mask', pred_masks_round)
 
             key = cv2.waitKey(0)
             if key == ord('q'):
