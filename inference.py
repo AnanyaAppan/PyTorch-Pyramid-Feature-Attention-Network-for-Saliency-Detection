@@ -60,7 +60,7 @@ def run_inference(args):
 
             print('Image :', batch_idx)
             pred_masks_raw = (pred_masks_raw * 255).astype("uint8")
-            root_dir = 'data/maps_test/'
+            root_dir = 'data/maps_val/'
             directory = args.imgs_folder.split('/')[-1] + "/"
             if not os.path.exists(root_dir + directory):
                 os.makedirs(root_dir + directory)
