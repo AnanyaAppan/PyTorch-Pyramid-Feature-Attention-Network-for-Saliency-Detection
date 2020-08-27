@@ -19,6 +19,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description='Parameters to train your model.')
     parser.add_argument('--imgs_folder', default='./data/DUTS/DUTS-TE/DUTS-TE-Image', help='Path to folder containing images', type=str)
     parser.add_argument('--model_path', default='./model/best-model_epoch-204_mae-0.0505_loss-0.1370.pth', help='Path to model', type=str)
+    parser.add_argument('--dest_root', default='../data/maps_val/', help='Path to destination root', type=str)
     parser.add_argument('--use_gpu', default=True, help='Whether to use GPU or not', type=bool)
     parser.add_argument('--img_size', default=256, help='Image size to be used', type=int)
     parser.add_argument('--bs', default=24, help='Batch Size for testing', type=int)
@@ -60,7 +61,7 @@ def run_inference(args):
 
             print('Image :', batch_idx)
             pred_masks_raw = (pred_masks_raw * 255).astype("uint8")
-            root_dir = '../data/maps_val/'
+            root_dir = args.dest_root
             directory = args.imgs_folder.split('/')[-1] + "/"
             if not os.path.exists(root_dir + directory):
                 os.makedirs(root_dir + directory)
